@@ -28,10 +28,6 @@ jobs:
           - "windows-latest"
           - "macos-latest"
         python-version:
-          - "2.7"
-          - "3.5"
-          - "3.6"
-          - "3.7"
           - "3.8"
         build-type:
           - "cext"
@@ -51,6 +47,12 @@ jobs:
           - os: "windows-latest"
             python-version: "2.7"
             pytest-args: "-k 'not MockReconnectTest and not test_hanging_connect_within_overflow'"
+          - using: docker
+            os: ubuntu-latest
+            run: |
+              docker run --rm quay.io/pypa/manylinux2014_aarch64 ls
+            
+            
 
         exclude:
           # c-extensions fail to build on windows for python 3.5 and 2.7
