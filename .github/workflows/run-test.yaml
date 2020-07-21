@@ -34,8 +34,6 @@ jobs:
           - x86
 
         include:
-          - using: docker
-            os: ubuntu-latest
         fail-fast: false
 
     # steps to run in each job. Some are github actions, others run shell commands
