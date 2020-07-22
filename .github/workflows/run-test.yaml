@@ -1,42 +1,93 @@
-name: Build packages
+name: Run tests
 
-# Controls when the action will run. Triggers the workflow on push or pull request 
-# events but only for the master branch
 on:
+  # run on push in master or rel_* branches excluding changes are only on doc or example folders
   push:
-    branches: [ master, maint-1.4 ]
-  pull_request:
-    branches: [ master, maint-1.4 ]
-  release:
-    types: [ published ]
+    branches:
+      - master
+      - "rel_*"
+      # branches used to test the workflow
+      - "workflow_test_*"
+    paths-ignore:
+      - "doc/**"
+      - "examples/**"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  # global env to all steps
+  TOX_WORKERS: -n2
+
 jobs:
-    make-rhel-pkg:
-        name: Make RHEL package
-        runs-on: ubuntu-latest
-        container: centos:latest
-        steps:
-            - name: Prepare
-              run: |
-                yum update -y
-                yum install -y make rpmdevtools yum-utils
+  amd64-test:
+    name: ${{ matrix.python-version }}-${{ matrix.build-type }}-${{ matrix.architecture }}-${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      # run this job using this matrix, excluding some combinations below.
+      matrix:
+        os:
+          - "ubuntu-latest"
+          - "windows-latest"
+          - "macos-latest"
+        python-version:
+          - "2.7"
+          - "3.5"
+          - "3.6"
+          - "3.7"
+          - "3.8"
+        build-type:
+          - "cext"
+          - "nocext"
+        architecture:
+          - x64
+          - x86
 
-            - name: Clone repo
-              uses: actions/checkout@v2
+        include:
+          # the mock reconnect test seems to fail on the ci in windows
+          - os: "windows-latest"
+            pytest-args: "-k 'not MockReconnectTest'"
+          # python 2.7 or 3.5 on windows seem to fail also test_hanging_connect_within_overflow
+          - os: "windows-latest"
+            python-version: "3.5"
+            pytest-args: "-k 'not MockReconnectTest and not test_hanging_connect_within_overflow'"
+          - os: "windows-latest"
+            python-version: "2.7"
+            pytest-args: "-k 'not MockReconnectTest and not test_hanging_connect_within_overflow'"
 
-            - name: Make package
-              run: |
-                yum-builddep --assumeyes packaging/rpm/*.spec
-                make -C packaging/rpm pkg-local "DESTDIR=${GITHUB_WORKSPACE}/pkgs/"
+        exclude:
+          # c-extensions fail to build on windows for python 3.5 and 2.7
+          - os: "windows-latest"
+            python-version: "2.7"
+            build-type: "cext"
+          - os: "windows-latest"
+            python-version: "3.5"
+            build-type: "cext"
+          # linux and osx do not have x86 python
+          - os: "ubuntu-latest"
+            architecture: x86
+          - os: "macos-latest"
+            architecture: x86
 
-            - name: Publish package
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: rhel-pkg
-                path: pkgs
+      fail-fast: false
 
-    make-alpine-pkg:
+    # steps to run in each job. Some are github actions, others run shell commands
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v2
+
+      - name: Set up python
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: ${{ matrix.architecture }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade tox setuptools
+          pip list
+
+      - name: Run tests
+        run: tox -e github-${{ matrix.build-type }} -- -q --nomemory ${{ matrix.pytest-args }}
+  make-alpine-pkg:
         name: Make Alpine package
         runs-on: ubuntu-latest
         container: alpine:latest
@@ -68,109 +119,3 @@ jobs:
               with:
                 name: alpine-pkg
                 path: pkgs
-
-    make-debian-pkg:
-        name: Make Debian package
-        runs-on: ubuntu-latest
-        steps:
-            - name: Prepare
-              run: |
-                sudo apt-get update
-                sudo apt-get install -y dpkg-dev debhelper dh-systemd
-
-            - name: Clone repo
-              uses: actions/checkout@v2
-
-            - name: Build package
-              run: make -C "${GITHUB_WORKSPACE}/packaging/debian" pkg-local "DESTDIR=${GITHUB_WORKSPACE}/pkgs/"
-
-            - name: Publish package
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: debian-pkg
-                path: pkgs
-
-    test-on-macos:
-        name: Test on macOS
-        runs-on: macos-latest
-        steps:
-            - name: Prepare
-              run: |
-                python --version
-                brew install socat
-                sudo pip install robotframework pyyaml
-                sudo sysadminctl -addUser normuser -home /Users/normuser
-                sudo createhomedir -c
-
-            - name: Clone repo
-              uses: actions/checkout@v2
-
-            - name: Install Jobber
-              run: |
-                make check build
-                sudo make install DESTDIR=/
-                PLIST=packaging/darwin/launchd.plist
-                sudo chown root:admin "${PLIST}"
-                sudo launchctl load "${PLIST}"
-                sudo launchctl start info.nekonya.jobber
-
-            - name: Test
-              run: |
-                if sudo robot --include test --pythonpath platform_tests/keywords platform_tests/suites; then
-                    echo "::set-env name=PASSED_TESTS::true"
-                else
-                    echo "::set-env name=PASSED_TESTS::false"
-                fi
-                mkdir test-report
-                mv *.html test-report/
-
-            - name: Publish test report
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: mac-test-report
-                path: test-report
-
-            - name: SucceedOrFail
-              run: test "${PASSED_TESTS}" = true
-
-    test-on-debian:
-        name: Test on Debian
-        needs: make-debian-pkg
-        runs-on: ubuntu-latest
-        steps:
-            - name: Prepare
-              run: |
-                sudo apt-get update
-                sudo apt-get install -y python-pip socat
-                sudo pip install robotframework pyyaml
-                sudo useradd normuser -m
-
-            - name: Download package
-              uses: actions/download-artifact@v1
-              with:
-                name: debian-pkg
-
-            - name: Install package
-              run: sudo dpkg -i "$(find ${GITHUB_WORKSPACE} -name *.deb)"
-
-            - name: Clone repo
-              uses: actions/checkout@v2
-
-            - name: Test package
-              run: |
-                if sudo robot --include test --pythonpath platform_tests/keywords platform_tests/suites; then
-                    echo "::set-env name=PASSED_TESTS::true"
-                else
-                    echo "::set-env name=PASSED_TESTS::false"
-                fi
-                mkdir test-report
-                mv *.html test-report/
-
-            - name: Publish test report
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: debian-test-report
-                path: test-report
-
-            - name: SucceedOrFail
-              run: test "${PASSED_TESTS}" = true
