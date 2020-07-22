@@ -87,39 +87,7 @@ jobs:
 
       - name: Run tests
         run: tox -e github-${{ matrix.build-type }} -- -q --nomemory ${{ matrix.pytest-args }}
-  make-alpine-pkg:
-        name: Make wheel for arm64
-        runs-on: ubuntu-latest
-        container: alpine:latest
-        steps:
-            - name: Prepare
-              run: |
-                uname -m
-                apk update
-                apk upgrade
-                apk add make
-                apk add alpine-sdk
-                apk add go
-                apk add su-exec
-
-                adduser -G abuild -D jobber
-                su jobber -c "abuild-keygen -an"
-                find "/home/jobber/.abuild" -name '*.rsa.pub' -exec mv {} /etc/apk/keys/ ';'
-                chown root:root /etc/apk/keys/*
-
-            - name: Clone repo
-              uses: actions/checkout@v2
-
-            - name: Make package
-              run: |
-                chmod a+w . packaging/alpine
-                su jobber -c "make -C packaging/alpine pkg-local DESTDIR=${GITHUB_WORKSPACE}/pkgs/"
-
-            - name: Publish package
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: alpine-pkg
-                path: pkgs
+ 
   test_docker:
     name: Testing arm64 docker
     runs-on: ubuntu-latest
@@ -136,10 +104,7 @@ jobs:
         args: >
           bash -c
           "apt-get update &&
-          apt-get install -y python3.6 &&
-          python3.6 --version &&
-          python3.6 -c\"import platform; print(platform.machine())\""
-                adduser -G abuild -D jobber
-                su jobber -c "abuild-keygen -an"
-                find "/home/jobber/.abuild" -name '*.rsa.pub' -exec mv {} /etc/apk/keys/ ';'
-                chown root:root /etc/apk/keys/*
+          apt-get install -y python3.7 python3-pip&&
+          python3.7 --version &&
+          pythoin3.7 -m pip install --upgrade tox setuptools &&
+          python3.7 -m pip list \"
