@@ -1,4 +1,6 @@
-name: Run tests
+name: 
+  - Run tests
+  - arm64_run_test
 
 on:
   # run on push in master or rel_* branches excluding changes are only on doc or example folders
