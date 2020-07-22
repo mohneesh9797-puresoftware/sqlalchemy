@@ -102,4 +102,4 @@ jobs:
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: >
-          'bash -c " apt-get update"'
+          'bash -c "apt-get update"'
