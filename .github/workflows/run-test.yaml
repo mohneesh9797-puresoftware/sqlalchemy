@@ -127,7 +127,7 @@ jobs:
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-    - uses: docker://multiarch/ubuntu-core:arm64-bionic
+    - uses: docker://multiarch/centos
       with:
         args: 'uname -a'
 
