@@ -90,8 +90,8 @@ jobs:
         run: tox -e github-${{ matrix.build-type }} -- -q --nomemory ${{ matrix.pytest-args }}
 arm64_run_test:
   name: Make RHEL package
-        runs-on: ubuntu-latest
-        matrix:        
+      runs-on: ubuntu-latest
+      matrix:        
         os:
           - "ubuntu-latest"
         python-version:
