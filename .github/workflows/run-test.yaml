@@ -90,11 +90,11 @@ jobs:
   make-alpine-pkg:
         name: Make wheel for arm64
         runs-on: ubuntu-latest
-        container: quay.io/pypa/manylinux2014_aarch64
+        container: alpine:latest
         steps:
             - name: Prepare
               run: |
-                docker run --rm quay.io/pypa/manylinux2014_aarch64 ls 
+                docker run --rm quay.io/pypa/manylinux2014_aarch64:latest ls 
                 uname -m
                 apk update
                 apk upgrade
