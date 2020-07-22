@@ -127,11 +127,11 @@ jobs:
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
-    - uses: docker://quay.io/pypa/manylinux2014_aarch64
+    - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: 'uname -a'
 
-    - uses: docker://quay.io/pypa/manylinux2014_aarch64
+    - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: >
           bash -c
