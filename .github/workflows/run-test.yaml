@@ -102,9 +102,8 @@ jobs:
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: >
-          bash -c
-          "apt-get update &&
+          'apt-get update &&
           apt-get install -y python3.7 python3-pip&&
           python3.7 --version &&
           pythoin3.7 -m pip install --upgrade tox setuptools &&
-          python3.7 -m pip list \"
+          python3.7 -m pip list '
