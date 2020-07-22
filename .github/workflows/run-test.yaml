@@ -120,36 +120,7 @@ jobs:
               with:
                 name: alpine-pkg
                 path: pkgs
-  make-alpine-pkg:
-        name: Make wheel for arm64
-        runs-on: ubuntu-latest
-        container: alpine:latest
-        steps:
-            - name: Prepare
-              run: |
-                uname -m
-                apk update
-                apk upgrade
-                apk add make
-                apk add alpine-sdk
-                apk add go
-                apk add su-exec
- 
-
-            - name: Clone repo
-              uses: actions/checkout@v2
-
-            - name: Make package
-              run: |
-                chmod a+w . packaging/alpine
-                su jobber -c "make -C packaging/alpine pkg-local DESTDIR=${GITHUB_WORKSPACE}/pkgs/"
-
-            - name: Publish package
-              uses: actions/upload-artifact@v1.0.0
-              with:
-                name: alpine-pkg
-                path: pkgs
-test_docker:
+  test_docker:
     name: Testing arm64 docker
     runs-on: ubuntu-latest
     steps:
