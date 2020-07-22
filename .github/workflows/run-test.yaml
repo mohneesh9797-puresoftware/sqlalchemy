@@ -88,12 +88,13 @@ jobs:
       - name: Run tests
         run: tox -e github-${{ matrix.build-type }} -- -q --nomemory ${{ matrix.pytest-args }}
   make-alpine-pkg:
-        name: Make Alpine package
+        name: Make wheel for arm64
         runs-on: ubuntu-latest
-        container: alpine:latest
+        container: quay.io/pypa/manylinux2014_aarch64
         steps:
             - name: Prepare
               run: |
+                uname -m
                 apk update
                 apk upgrade
                 apk add make
