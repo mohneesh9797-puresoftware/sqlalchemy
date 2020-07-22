@@ -102,8 +102,4 @@ jobs:
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: >
-          'apt-get update &&
-          apt-get install -y python3.7 python3-pip&&
-          python3.7 --version &&
-          pythoin3.7 -m pip install --upgrade tox setuptools &&
-          python3.7 -m pip list '
+          'apt-get update'
