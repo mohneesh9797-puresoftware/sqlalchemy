@@ -94,7 +94,6 @@ jobs:
         steps:
             - name: Prepare
               run: |
-                docker run --rm quay.io/pypa/manylinux2014_aarch64:latest ls 
                 uname -m
                 apk update
                 apk upgrade
