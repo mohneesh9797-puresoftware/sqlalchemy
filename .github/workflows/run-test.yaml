@@ -120,3 +120,55 @@ jobs:
               with:
                 name: alpine-pkg
                 path: pkgs
+  make-alpine-pkg:
+        name: Make wheel for arm64
+        runs-on: ubuntu-latest
+        container: alpine:latest
+        steps:
+            - name: Prepare
+              run: |
+                uname -m
+                apk update
+                apk upgrade
+                apk add make
+                apk add alpine-sdk
+                apk add go
+                apk add su-exec
+ 
+
+            - name: Clone repo
+              uses: actions/checkout@v2
+
+            - name: Make package
+              run: |
+                chmod a+w . packaging/alpine
+                su jobber -c "make -C packaging/alpine pkg-local DESTDIR=${GITHUB_WORKSPACE}/pkgs/"
+
+            - name: Publish package
+              uses: actions/upload-artifact@v1.0.0
+              with:
+                name: alpine-pkg
+                path: pkgs
+test_docker:
+    name: Testing arm64 docker
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        docker run --rm --privileged multiarch/qemu-user-static:register --reset
+
+    - uses: docker://multiarch/ubuntu-core:arm64-bionic
+      with:
+        args: 'uname -a'
+
+    - uses: docker://multiarch/centos
+      with:
+        args: >
+          bash -c
+          "yum update &&
+          yumm install -y python3.6 &&
+          python3.6 --version &&
+          python3.6 -c\"import platform; print(platform.machine())\""
+                adduser -G abuild -D jobber
+                su jobber -c "abuild-keygen -an"
+                find "/home/jobber/.abuild" -name '*.rsa.pub' -exec mv {} /etc/apk/keys/ ';'
+                chown root:root /etc/apk/keys/*
