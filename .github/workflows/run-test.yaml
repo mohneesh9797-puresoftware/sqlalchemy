@@ -93,13 +93,14 @@ jobs:
     arch: aarch64
     runs-on: ubuntu-latest
     steps:
-    - run: uname -m 
+    name: Checkout
+    uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7 -m pip install --upgrade tox setuptools && python3.7 -m pip list '
+        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7 -m pip install --upgrade tox setuptools && python3.7 -m pip list && tox '
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: >
