@@ -106,5 +106,5 @@ jobs:
           apt-get install -y python3.6 &&
           python3.6 --version &&
           python3.6 -c\"import platform; print(platform.machine())\" &&
-          python3.6 -c \"import os; os.system('ls -lS')""
+          python3.6 -c \"import os; os.getcwd()""
     
