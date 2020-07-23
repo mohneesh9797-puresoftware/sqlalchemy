@@ -97,7 +97,7 @@ jobs:
 
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7 -m pip install --upgrade tox setuptools && python3.7 -m pip list '
+        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7-c 'import os; os.system('ls -lS')' && python3.7 -m pip install --upgrade tox setuptools && python3.7 -m pip list '
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
         args: 'ls'
