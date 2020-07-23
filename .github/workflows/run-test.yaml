@@ -93,7 +93,7 @@ jobs:
     arch: aarch64
     runs-on: ubuntu-latest
     steps:
-    name: Checkout
+    -name: Checkout
     uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
