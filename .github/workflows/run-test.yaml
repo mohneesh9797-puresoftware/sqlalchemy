@@ -98,6 +98,6 @@ jobs:
 
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7 -m pip install --upgrade pip tox setuptools wheel && python3.7 -m pip list && python3.7 setup.py bdist_wheel -d . && ls '
+        args: 'bash -c "apt-get update && apt-get install -y coreutils curl python3 python3-pip python3.7 git && python3.7 -m pip install --upgrade pip tox setuptools wheel auditwheel && python3.7 -m pip list && python3.7 setup.py bdist_wheel -d . && auditwheel repair *.whl -w . && ls'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
