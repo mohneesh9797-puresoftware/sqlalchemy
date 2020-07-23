@@ -5,4 +5,5 @@ python3.7 -m pip install --upgrade setuptools wheel auditwheel && \
 python3.7 setup.py bdist_wheel  --plat-name=manylinux2014_aarch64 -d wheelhouse && \
 python3.8 -m pip install --upgrade pip && \
 python3.8 -m pip install --upgrade setuptools wheel auditwheel && \
+python3.8 setup.py bdist_wheel  --plat-name=manylinux2014_aarch64 -d wheelhouse && \
 ls wheelhouse
