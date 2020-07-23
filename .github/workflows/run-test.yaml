@@ -90,8 +90,10 @@ jobs:
  
   test_docker:
     name: Testing arm64 docker
+    arch: aarch64
     runs-on: ubuntu-latest
     steps:
+    - run: uname -m 
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
 
