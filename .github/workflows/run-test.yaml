@@ -104,8 +104,8 @@ jobs:
           bash -c
           "apt-get update &&
           apt-get install -y python3.6 &&
-          python3 --version &&
-          python3 -c\"import platform; print(platform.machine())\" &&
+          python3.6 --version &&
+          python3.6 -c\"import platform; print(platform.machine())\" &&
           cd ../ &&
           ls 
           cd /
