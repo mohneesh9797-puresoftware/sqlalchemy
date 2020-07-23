@@ -28,6 +28,6 @@ jobs:
 
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash -c "apt-get update && apt-get install -y coreutils curl unzip python3 python3-pip python3.7 libpython3.7-dev git && python3.7 -m pip install --upgrade pip && python3.7 -m pip install --upgrade tox setuptools cibuildwheel wheel auditwheel && python3.7 -m pip list && python3.7 -m cibuidwheel  --plat-name=manylinux2014_aarch64 -d . && auditwheel show *.whl && auditwheel repair *.whl -w . && tox -e github-nocext -q && ls '
+        args: 'bash -c "apt-get update && apt-get install -y coreutils curl unzip python3 python3-pip python3.7 libpython3.7-dev git && python3.7 -m pip install --upgrade pip && python3.7 -m pip install --upgrade tox setuptools cibuildwheel wheel auditwheel && python3.7 -m pip install cibuildwheel && python3.7 -m pip list && python3.7 -m cibuidwheel  --plat-name=manylinux2014_aarch64 -d . && auditwheel show *.whl && auditwheel repair *.whl -w . && tox -e github-nocext -q && ls '
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
