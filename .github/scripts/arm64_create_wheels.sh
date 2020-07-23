@@ -1,5 +1,5 @@
-apt-get update
-apt-get install -y coreutils curl python3 python3-dev python3-pip python3.7 libpython3.7-dev python3.8 libpython3.8-dev
+apt-get update -qq
+apt-get install -qq coreutils curl python3 python3-dev python3-pip python3.7 libpython3.7-dev python3.8 libpython3.8-dev
 python_versions=("python3.6" "python3.7" "python3.8")
 for pyversion in "${python_versions[@]}"
 do
