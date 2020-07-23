@@ -4,6 +4,7 @@ on:
   # run when a release has been created
   push:
     branches:
+      - arm
       - master
       - "rel_*"
       # branches used to test the workflow
