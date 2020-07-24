@@ -89,14 +89,19 @@ jobs:
         run: tox -e github-${{ matrix.build-type }} -- -q --nomemory ${{ matrix.pytest-args }}
  
   test_docker:
-    name: Testing arm64 docker
+    name: Testing arm64-python${{ matrix.python-version }}
     runs-on: ubuntu-latest
+    strategy:
+        python-version:
+          - "3.6"
+          - "3.7"
+          - "3.8"
     steps:
     - uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash .github/scripts/arm64_test.sh'
+        args: 'bash .github/scripts/arm64_test.sh python${{ matrix.python-version }}'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
