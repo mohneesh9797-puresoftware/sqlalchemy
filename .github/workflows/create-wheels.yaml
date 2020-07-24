@@ -311,6 +311,6 @@ jobs:
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
     - uses: docker://multiarch/ubuntu-core:arm64-bionic
       with:
-        args: 'bash .github/scripts/arm64_create_wheels.sh bash python${{ matrix.python-version }}'
+        args: 'bash .github/scripts/arm64_create_wheels.sh python${{ matrix.python-version }}'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
