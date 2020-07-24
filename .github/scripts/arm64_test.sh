@@ -1,7 +1,6 @@
 apt-get update -qq
-python=$1
-echo $python
-apt-get install -qq coreutils python3 python3-pip $python
-$python -m pip install --upgrade pip
-$python -m pip install --upgrade setuptools tox
+apt-get install -qq coreutils python3 python3-pip $1
+$1 -m pip install --upgrade pip
+$1 -m pip install --upgrade setuptools tox
+alias python=$1
 tox -e $2 -q
