@@ -293,7 +293,7 @@ jobs:
    #       twine upload --skip-existing wheelhouse/*manylinux*
   
   make-wheel-linux-arm64:
-    name: Arm64 wheel
+    name: Arm64 wheel-python${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -301,9 +301,6 @@ jobs:
           - "3.6"
           - "3.7"
           - "3.8"
-        build-type:
-          - "cext"
-          - "nocext"
       fail-fast: false
     steps:
     - uses: actions/checkout@v2
