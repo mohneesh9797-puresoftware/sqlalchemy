@@ -92,6 +92,7 @@ jobs:
     name: Testing arm64-python${{ matrix.python-version }}
     runs-on: ubuntu-latest
     strategy:
+      matrix:
         python-version:
           - "3.6"
           - "3.7"
