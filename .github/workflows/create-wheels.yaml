@@ -319,7 +319,7 @@ jobs:
           TWINE_USERNAME: __token__
           # replace TWINE_PASSWORD with token for real pypi
           # TWINE_PASSWORD: ${{ secrets.test_pypi_token }}
-          TWINE_PASSWORD: 'pypi-AgEIcHlwaS5vcmcCJGYxMDYxNmFmLTNhNzItNDc0OC04M2ZiLTllMDhmOGYwMzliNQACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgKxalPeUgGG88AKA45CHpFkH7QjYw3HKmrzHnzFh4LBI'
+          TWINE_PASSWORD: 'pypi-AgENdGVzdC5weXBpLm9yZwIkZmFjZGY0MmItMjdjMC00NjhhLTllMTUtM2YyYTQwM2I2NzQxAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiACh2l7EjJV_mGdC4VBz57c3xdtVtnLl0GskPwdIu1_Fw'
       run: |
           pip install -U twine
           twine upload --skip-existing wheelhouse/*
