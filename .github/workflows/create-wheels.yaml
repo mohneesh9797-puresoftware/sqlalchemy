@@ -319,6 +319,7 @@ jobs:
           # replace TWINE_PASSWORD with token for real pypi
           # TWINE_PASSWORD: ${{ secrets.test_pypi_token }}
           TWINE_PASSWORD: 'pypi-AgENdGVzdC5weXBpLm9yZwIkZmFjZGY0MmItMjdjMC00NjhhLTllMTUtM2YyYTQwM2I2NzQxAAIleyJwZXJtaXNzaW9ucyI6ICJ1c2VyIiwgInZlcnNpb24iOiAxfQAABiACh2l7EjJV_mGdC4VBz57c3xdtVtnLl0GskPwdIu1_Fw'
+          repository_url: https://test.pypi.org/legacy/
       run: |
           pip install -U twine
           twine upload --skip-existing wheelhouse/*
