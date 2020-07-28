@@ -311,10 +311,8 @@ jobs:
         args: 'bash .github/scripts/arm64_create_wheels.sh python${{ matrix.python-version }}'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy
-    - name: Set up Python for twine
-        # twine on py2 is very old and is no longer updated, so we change to python 3.8 before upload
-        uses: actions/setup-python@v1
-        with:
+    - uses: actions/setup-python@v1
+      with:
           python-version: "3.8"
 #
     - name: Publish wheel
