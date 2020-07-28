@@ -215,25 +215,25 @@ jobs:
           # `--no-deps` is used to only generate the wheel for the current library. Redundant in sqlalchemy since it has no dependencies
           pip-wheel-args: "--no-use-pep517 -v --no-deps"
 
-      - name: Check created wheel
-        # check that the wheel is compatible with the current installation.
-        # If it is then does:
-        # - install the created wheel without using the pypi index
-        # - check the c extension
-        # - runs the tests
-        run: |
-          pip install -q wheel
-          version=`python -W ignore -c 'from wheel.pep425tags import get_abbr_impl, get_impl_ver, get_abi_tag; print("{0}{1}-{2}".format(get_abbr_impl(), get_impl_ver(), get_abi_tag()))'`
-          echo Wheel tag ${{ matrix.python-version }}. Installed version $version.
-          if [[ "${{ matrix.python-version }}" = "$version" ]]
-          then
-            pip install -f wheelhouse --no-index sqlalchemy
-            python -c 'from sqlalchemy import cprocessors, cresultproxy, cutils'
-            pip install pytest pytest-xdist ${{ matrix.extra-requires }}
-            pytest -n2 -q test -k 'not MockReconnectTest' --nomemory
-          else
-            echo Not compatible. Skipping install.
-          fi
+  #    - name: Check created wheel
+  #      # check that the wheel is compatible with the current installation.
+  #      # If it is then does:
+  #      # - install the created wheel without using the pypi index
+  #      # - check the c extension
+  #      # - runs the tests
+  #      run: |
+  #        pip install -q wheel
+  #        version=`python -W ignore -c 'from wheel.pep425tags import get_abbr_impl, get_impl_ver, get_abi_tag; print("{0}{1}-{2}".format(get_abbr_impl(), get_impl_ver(), get_abi_tag()))'`
+  #        echo Wheel tag ${{ matrix.python-version }}. Installed version $version.
+  #        if [[ "${{ matrix.python-version }}" = "$version" ]]
+  #        then
+  #          pip install -f wheelhouse --no-index sqlalchemy
+  #          python -c 'from sqlalchemy import cprocessors, cresultproxy, cutils'
+  #          pip install pytest pytest-xdist ${{ matrix.extra-requires }}
+  #          pytest -n2 -q test -k 'not MockReconnectTest' --nomemory
+  #        else
+  #          echo Not compatible. Skipping install.
+  #        fi
 
       - name: Get wheel names
         id: wheel-name
