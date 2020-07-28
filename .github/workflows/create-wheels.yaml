@@ -315,7 +315,8 @@ jobs:
       with:
           python-version: "3.8"
 #
-    - TWINE_USERNAME: __token__
+    - env:   
+          TWINE_USERNAME: __token__
           # replace TWINE_PASSWORD with token for real pypi
           # TWINE_PASSWORD: ${{ secrets.test_pypi_token }}
           TWINE_PASSWORD: 'pypi-AgEIcHlwaS5vcmcCJGYxMDYxNmFmLTNhNzItNDc0OC04M2ZiLTllMDhmOGYwMzliNQACJXsicGVybWlzc2lvbnMiOiAidXNlciIsICJ2ZXJzaW9uIjogMX0AAAYgKxalPeUgGG88AKA45CHpFkH7QjYw3HKmrzHnzFh4LBI'
