@@ -322,4 +322,4 @@ jobs:
           repository_url: https://test.pypi.org/legacy/
       run: |
           pip install -U twine
-          twine upload --skip-existing --repository-url https://test.pypi.org/legacy/ wheelhouse/*
+          twine upload --skip-existing --repository-url https://upload.pypi.org/legacy/ wheelhouse/*
