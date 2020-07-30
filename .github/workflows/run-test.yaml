@@ -105,7 +105,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged hypriot/qemu-register
-    - uses: docker://arm64v8/python:${{ matrix.python-version }}-buster
+    - uses: docker://arm64v8/python:${{ matrix.python-version }}
       with:
         args: 'bash .github/scripts/arm64_test.sh python-${{ matrix.python-version }} github-${{ matrix.build-type }}'
     - run: |
