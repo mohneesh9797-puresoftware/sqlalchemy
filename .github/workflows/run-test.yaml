@@ -105,8 +105,8 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged hypriot/qemu-register
-    - uses: docker://quay.io/pypa/manylinux2014_aarch64
+    - uses: docker://arm64v8/python:${{ matrix.python-version }}-buster
       with:
-        args: 'bash .github/scripts/arm64_test.sh ${{ matrix.python-version }} github-${{ matrix.build-type }}'
+        args: 'bash .github/scripts/arm64_test.sh python-${{ matrix.python-version }} github-${{ matrix.build-type }}'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
