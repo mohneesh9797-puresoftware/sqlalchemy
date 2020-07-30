@@ -1,6 +1,3 @@
-apt-get update -qq
-apt-get install -qq coreutils python3-pip $1 lib$1-dev
-$1 -m pip install --upgrade pip
-$1 -m pip install --upgrade setuptools tox
-alias python=$1
-tox -e $2 -- -q --nomemory
+yum update -qq
+/opt/_internal/cpython-$1*/bin/python -m pip install --upgrade setuptools tox
+/opt/_internal/cpython-$1*/bin/python -m tox -e $2 -- -q --nomemory
