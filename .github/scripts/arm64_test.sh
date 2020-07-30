@@ -1,3 +1,5 @@
-yum update -qq
-/opt/_internal/cpython-$1*/bin/python -m pip install --upgrade setuptools tox
-/opt/_internal/cpython-$1*/bin/python -m tox -e $2 -- -q --nomemory
+apt-get update -qq
+apt-get install -qq coreutils
+$1 -m pip install --upgrade pip
+$1 -m pip install --upgrade setuptools tox
+tox -e $2 -- -q --nomemory
