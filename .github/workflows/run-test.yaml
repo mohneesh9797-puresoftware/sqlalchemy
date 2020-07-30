@@ -104,9 +104,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - run: |
-        docker run --rm --privileged multiarch/qemu-user-static:register --reset
-    - uses: RalfG/python-wheels-manylinux-build@v0.3-manylinux2014_aarch64
+        docker run --rm --privileged hypriot/qemu-register
+    - uses: docker://quay.io/pypa/manylinux2014_aarch64
       with:
-        args: 'bash .github/scripts/arm64_test.sh python${{ matrix.python-version }} github-${{ matrix.build-type }}'
+        args: 'bash .github/scripts/arm64_test.sh ${{ matrix.python-version }} github-${{ matrix.build-type }}'
     - run: |
         ls /home/runner/work/sqlalchemy/sqlalchemy 
