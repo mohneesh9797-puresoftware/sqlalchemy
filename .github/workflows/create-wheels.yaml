@@ -306,7 +306,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: |
         docker run --rm --privileged multiarch/qemu-user-static:register --reset
-    - uses: docker://arm64v8/python
+    - uses: docker://arm64v8/python:3.7-buster
       with:
         args: 'bash .github/scripts/arm64_create_wheels.sh python${{ matrix.python-version }}'
     #- uses: actions/setup-python@v1
